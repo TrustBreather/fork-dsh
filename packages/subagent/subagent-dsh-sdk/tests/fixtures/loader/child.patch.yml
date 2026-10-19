@@ -9,10 +9,6 @@
   config:
     personaPrefix: 'Echo where you run.'
 
-- id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
-  disabled: true
-
 - id: skill-filesystem
   name: '@deepseek-ai/dsh-skill-filesystem'
   config:

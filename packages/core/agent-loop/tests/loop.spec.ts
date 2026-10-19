@@ -992,11 +992,11 @@ describe('agent loop', () => {
     const ctx = await harness(adapter)
     const agent = await ctx.agentLoop.create(SessionId('raw-context'), { provider: 'mock', model: 'mock' })
     const text = '<system-reminder>Additional instructions from: pkg/AGENTS.md</system-reminder>'
-    agent.inject(createUserMessage({ content: [{ type: 'text', text }], source: { kind: 'agent-instructions', form: 'instructions', changes: [] } }))
+    agent.inject(createUserMessage({ content: [{ type: 'text', text }], source: { kind: 'agent-instructions', form: 'instructions', changes: [] } as never }))
     send(agent, 'go')
     await waitForIdle(ctx, agent)
 
-    const contextEvent = agent.session.snapshotEvents().find(event => event.type === 'user/message' && event.data.source.kind === 'agent-instructions')
+    const contextEvent = agent.session.snapshotEvents().find(event => event.type === 'user/message' && (event.data.source.kind as string) === 'agent-instructions')
     expect(contextEvent?.type === 'user/message' && contextEvent.data.source)
       .toEqual({ kind: 'agent-instructions', form: 'instructions', changes: [] })
     const requestText = JSON.stringify(adapter.requests[0]!.messages)

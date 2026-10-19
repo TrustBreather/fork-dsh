@@ -22,10 +22,10 @@
     "!dist/preview"
   ],
   "scripts": {
-    "build": "vite build",
-    "dev": "vite",
-    "watch": "vite build --watch --no-emptyOutDir",
-    "build:preview": "pnpm --filter @deepseek-ai/dsh-experimental-webworker-runtime exec tsdown && pnpm --filter @deepseek-ai/dsh-experimental-webworker-packer exec tsdown && vite build && dsh-pack-vfs-image --out dist/preview/vfs-image.tar.gz",
+    "build": "tsx ../../scripts/web-vite.ts build",
+    "dev": "tsx ../../scripts/web-vite.ts dev",
+    "watch": "tsx ../../scripts/web-vite.ts build --watch --no-emptyOutDir",
+    "build:preview": "pnpm --filter @deepseek-ai/dsh-experimental-webworker-runtime exec tsdown && pnpm --filter @deepseek-ai/dsh-experimental-webworker-packer exec tsdown && pnpm run build && dsh-pack-vfs-image --out dist/preview/vfs-image.tar.gz",
     "serve:preview": "http-server dist -a 0.0.0.0 -p 4173 -c-1"
   },
   "license": "MIT",

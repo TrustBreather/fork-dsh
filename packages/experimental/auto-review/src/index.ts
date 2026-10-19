@@ -10,7 +10,6 @@
 
 import type { Context } from '@deepseek-ai/cordis'
 import type { Agent } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-agent-instructions'
 import {
   BlockAssembler,
   type ContentBlock,
@@ -180,9 +179,16 @@ function isHumanInstruction(source: MessageSource): boolean {
     && typeof (source as { readonly rpcId?: unknown }).rpcId === 'string'
 }
 
-/** Whether this visible context is the current project-instruction source. */
+/**
+ * Whether this visible context is the current project-instruction source.
+ *
+ * Compared as a widened string: sessions recorded while `dsh-agent-instructions`
+ * still injected workspace context carry this source, and this reader must keep
+ * classifying them. No current producer emits one.
+ */
 function isProjectInstruction(source: MessageSource): boolean {
-  return source.kind === 'agent-instructions'
+  const kind: string = source.kind
+  return kind === 'agent-instructions'
 }
 
 /** Whether this source is a compaction checkpoint. */
@@ -364,7 +370,6 @@ function snapshotAutoReview(agent: Agent, exec: ToolExecution): ReviewSnapshot {
   // and PTC starts carry the authorizations and duplicate identities this call is
   // compared against, and the direct parent's initial prompt sets the delegated
   // scope. No projection or paged reader exposes those records yet.
-  // oxlint-disable-next-line typescript/no-deprecated -- Reviewer needs the whole action history; no projection or paged reader exists yet.
   const events = session.snapshotEvents()
   const nodes = [...session.surface.nodes]
   const header = session.requestHeader()

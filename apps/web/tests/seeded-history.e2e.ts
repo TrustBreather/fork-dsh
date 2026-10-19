@@ -409,7 +409,7 @@ describe('web e2e: seeded history renders through cold resume', () => {
           path: 'AGENTS.md',
           digest: 'context-injection-browser-snapshot',
         }],
-      },
+      } as never,
     }), { surfaceOp: 'append' })
     await scaffold.ctx.sessions.flush(agent.session)
     expect(agent.session.snapshotEvents()).toContainEqual(injected)
@@ -474,7 +474,7 @@ describe('web e2e: seeded history renders through cold resume', () => {
     const session = scaffold.ctx.sessions.get(SessionId(SEED_ID))
     if (session === undefined) throw new Error('seeded session is unavailable')
     const instructions = session.snapshotEvents().filter(event => event.type === 'user/message'
-      && event.data.source.kind === 'agent-instructions')
+      && (event.data.source.kind as string) === 'agent-instructions')
     expect(instructions).toHaveLength(1)
     expect(instructions[0]?.data).toMatchObject({ source: { form: 'instructions', changes: [{ path: 'AGENTS.md' }] } })
     expect(JSON.stringify(instructions[0]?.data)).toContain('Instruction 24: preserve the logged context contract.')

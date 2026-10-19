@@ -1,7 +1,7 @@
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
+import { afterEach, describe, expect, it, onTestFinished } from 'vitest'
 import { Context } from '@deepseek-ai/cordis'
 import LlmRuntime, { createUserMessage, ToolCallId, HarnessError  } from '@deepseek-ai/dsh-llm'
 import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
@@ -23,7 +23,6 @@ import Sandbox from '@deepseek-ai/dsh-sandbox-local'
 import SandboxPolicy from '@deepseek-ai/dsh-sandbox-policy'
 import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
 import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
-import * as AgentInstructions from '@deepseek-ai/dsh-agent-instructions'
 import LocalJobRegistry from '@deepseek-ai/dsh-jobs-local'
 import * as ToolJobs from '@deepseek-ai/dsh-tool-jobs'
 import CordisHostRunner from '@deepseek-ai/dsh-cordis-host-runner'
@@ -81,7 +80,6 @@ async function workspacePtcModeHarness(): Promise<Context> {
   await harness.plugin(AgentRegistry)
   await harness.plugin(LocalFileSystem, { cwd: '/' })
   await harness.plugin(ToolFs)
-  await harness.plugin(AgentInstructions, { maxBytes: 65536 })
   await harness.plugin(AgentLoop, { agents: [] })
   await harness.plugin(LlmDeepSeek, { models: [{ id: 'deepseek-v4-flash' }] })
   await mountRuntime(harness)
@@ -381,21 +379,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('PTC mode: real model writes a pr
     const events: readonly SessionEvent[] = handle.agent.session.snapshotEvents()
     const dispatch = events.find(event => event.type === 'tool/ptc-dispatch' && event.data.name === 'read')
     const outerResult = events.find(event => event.type === 'tool/result')
-    const workspaceContext = await vi.waitFor(() => {
-      const splice = handle.agent.session.snapshotEvents().findLast(event => event.type === 'agent/inbox/spliced'
-        && event.data.inserted.some(message => message.source.kind === 'agent-instructions'))
-      const inserted = splice?.type === 'agent/inbox/spliced'
-        ? splice.data.inserted.find(message => message.source.kind === 'agent-instructions')
-        : undefined
-      expect(inserted).toBeDefined()
-      return inserted!
-    })
     expect(dispatch).toBeDefined()
     expect(outerResult).toBeDefined()
-    const contextText = workspaceContext.content
-      .filter(block => block.type === 'text')
-      .map(block => block.text)
-      .join('\n')
-    expect(contextText).toContain(WORKSPACE_PROBE)
   }, 180_000)
 })

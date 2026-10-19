@@ -1,7 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@deepseek-ai/cordis'
 import type { Agent } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-agent-instructions'
 import { compactCheckpointSource, CompactionId } from '@deepseek-ai/dsh-compaction'
 import LlmRuntime, {
   createMessage,
@@ -311,10 +310,10 @@ describe('native review request', () => {
     appendUser(session, 'checkpoint authority', compactCheckpointSource(CompactionId('checkpoint-1')))
     appendUser(session, 'project authority', {
       kind: 'agent-instructions', form: 'instructions', changes: [],
-    })
+    } as never)
     session.append('user/message', createUserMessage({
       content: [],
-      source: { kind: 'agent-instructions', form: 'instructions', changes: [] },
+      source: { kind: 'agent-instructions', form: 'instructions', changes: [] } as never,
     }), { surfaceOp: 'append' })
     appendUser(session, 'tool-source secret', { kind: 'tool', callId: ToolCallId('result-source') })
     appendAssistant(session, [
@@ -401,7 +400,7 @@ describe('native review request', () => {
       expect.objectContaining({
         kind: 'user-message',
         role: 'constraint',
-        source: { kind: 'agent-instructions', form: 'instructions', changes: [] },
+        source: { kind: 'agent-instructions', form: 'instructions', changes: [] } as never,
         content: [{ type: 'text', text: 'project authority' }],
       }),
     ])

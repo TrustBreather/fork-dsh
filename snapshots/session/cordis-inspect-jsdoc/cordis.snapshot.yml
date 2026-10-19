@@ -15,11 +15,6 @@
     root: !!js dshHomePath('sessions')
     compression: none
 
-- id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
-  config:
-    maxBytes: 65536
-
 - id: tools
   name: '@deepseek-ai/dsh-tools'
   config:

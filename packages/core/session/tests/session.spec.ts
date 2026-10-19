@@ -119,7 +119,7 @@ describe('Session', () => {
     const session = Session.create(SessionId('s2-raw'))
     const message = createUserMessage({
       content: [{ type: 'text', text: '<system-reminder>Additional instructions from: pkg/AGENTS.md</system-reminder>' }],
-      source: { kind: 'agent-instructions', form: 'instructions', changes: [] },
+      source: { kind: 'agent-instructions', form: 'instructions', changes: [] } as never,
     })
     session.append('user/message', message, { surfaceOp: 'append' })
 

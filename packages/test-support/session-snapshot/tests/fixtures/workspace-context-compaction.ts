@@ -21,8 +21,8 @@ export function apply(ctx: Context): void {
     const baseline = agent.session.surface.nodes
       .map(seq => agent.session.snapshotEvents()[seq])
       .find(event => event?.type === 'user/message'
-        && event.data.source.kind === 'agent-instructions'
-        && event.data.source.baseline === true)
+        && (event.data.source.kind as string) === 'agent-instructions'
+        && (event.data.source as { baseline?: boolean }).baseline === true)
     if (baseline === undefined) throw new Error('workspace baseline missing before snapshot compaction')
     const openTurn = agent.session.snapshotEvents().findLast(event => event.type === 'turn/start')
     if (openTurn?.type !== 'turn/start') throw new Error('workspace snapshot compaction has no open turn')

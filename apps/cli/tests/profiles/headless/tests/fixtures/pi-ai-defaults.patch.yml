@@ -28,9 +28,6 @@
         model: deepseek-v4-flash
         cwd: !!js process.cwd()
 
-- id: agent-instructions
-  disabled: true
-
 - id: session-persistence-jsonl
   config:
     root: './.sessions'

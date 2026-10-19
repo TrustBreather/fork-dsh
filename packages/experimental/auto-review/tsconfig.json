@@ -18,9 +18,6 @@
       "path": "../../core/agent"
     },
     {
-      "path": "../../context/agent-instructions"
-    },
-    {
       "path": "../../compaction/compaction"
     },
     {
