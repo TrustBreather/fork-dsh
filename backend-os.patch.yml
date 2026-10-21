@@ -92,12 +92,15 @@
         config:
           - id: compaction-basic
             name: '@deepseek-ai/dsh-compaction-basic'
+            disabled: true
             config:
               auto: false
           - id: command-compact
             name: '@deepseek-ai/dsh-command-compact'
+            disabled: true
           - id: tool-result-pruner
             name: '@deepseek-ai/dsh-compaction-tool-result-pruner'
+            disabled: true
             config:
               thresholdChars: 8192
               headChars: 4096
@@ -110,10 +113,13 @@
         config:
           - id: tool-subagent-control
             name: '@deepseek-ai/dsh-tool-subagent-control'
+            disabled: true
           - id: tool-subagent-list-agents
             name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+            disabled: true
           - id: tool-subagent
             name: '@deepseek-ai/dsh-tool-subagent'
+            disabled: true
             config:
               provider: spawn
               toolName: subagent
@@ -121,6 +127,7 @@
               backgroundMode: continuable
           - id: tool-subagent-fork
             name: '@deepseek-ai/dsh-tool-subagent'
+            disabled: true
             config:
               provider: fork
               toolName: subagent_fork
@@ -234,12 +241,15 @@
         config:
           - id: compaction-basic
             name: '@deepseek-ai/dsh-compaction-basic'
+            disabled: true
             config:
               auto: false
           - id: command-compact
             name: '@deepseek-ai/dsh-command-compact'
+            disabled: true
           - id: tool-result-pruner
             name: '@deepseek-ai/dsh-compaction-tool-result-pruner'
+            disabled: true
             config:
               thresholdChars: 8192
               headChars: 4096
@@ -252,10 +262,13 @@
         config:
           - id: tool-subagent-control
             name: '@deepseek-ai/dsh-tool-subagent-control'
+            disabled: true
           - id: tool-subagent-list-agents
             name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+            disabled: true
           - id: tool-subagent
             name: '@deepseek-ai/dsh-tool-subagent'
+            disabled: true
             config:
               provider: spawn
               toolName: subagent
@@ -263,6 +276,7 @@
               backgroundMode: continuable
           - id: tool-subagent-fork
             name: '@deepseek-ai/dsh-tool-subagent'
+            disabled: true
             config:
               provider: fork
               toolName: subagent_fork
@@ -381,12 +395,15 @@
         config:
           - id: compaction-basic
             name: '@deepseek-ai/dsh-compaction-basic'
+            disabled: true
             config:
               auto: false
           - id: command-compact
             name: '@deepseek-ai/dsh-command-compact'
+            disabled: true
           - id: tool-result-pruner
             name: '@deepseek-ai/dsh-compaction-tool-result-pruner'
+            disabled: true
             config:
               thresholdChars: 8192
               headChars: 4096
@@ -399,10 +416,13 @@
         config:
           - id: tool-subagent-control
             name: '@deepseek-ai/dsh-tool-subagent-control'
+            disabled: true
           - id: tool-subagent-list-agents
             name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+            disabled: true
           - id: tool-subagent
             name: '@deepseek-ai/dsh-tool-subagent'
+            disabled: true
             config:
               provider: spawn
               toolName: subagent
@@ -410,6 +430,7 @@
               backgroundMode: continuable
           - id: tool-subagent-fork
             name: '@deepseek-ai/dsh-tool-subagent'
+            disabled: true
             config:
               provider: fork
               toolName: subagent_fork
