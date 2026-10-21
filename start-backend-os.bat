@@ -1,7 +1,9 @@
 @echo off
 setlocal
+cd /d "%~dp0"
 
-set "BACKEND_ROOT=C:\Users\NCO\OneDrive\Desktop\New folder (22)\backend-os-kernel-integrated"
+if not defined BACKEND_OS_ROOT set "BACKEND_OS_ROOT=%~dp0..\backend-os-kernel-integrated"
+for %%I in ("%BACKEND_OS_ROOT%") do set "BACKEND_ROOT=%%~fI"
 if not exist "%BACKEND_ROOT%\start_backend.bat" (
   echo ERROR: BackendOS launcher not found:
   echo %BACKEND_ROOT%\start_backend.bat

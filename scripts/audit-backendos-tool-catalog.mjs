@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Read-only provenance audit for an unexpectedly large OpenAI `tools` array.
+ * Read-only source-evidence audit for an unexpectedly large OpenAI `tools` array.
  *
  * This script never boots dsh, starts BackendOS, writes a fixture, or changes
  * the worktree. It compares the captured wire evidence with the source-side
@@ -136,7 +136,7 @@ const attachment = attachmentPath === ''
     }
 
 const result = {
-  provenance: {
+  sourceEvidence: {
     harness: fileInfo(harnessRoot),
     backend: fileInfo(backendRoot),
     headless: fileInfo(headlessRoot),
@@ -178,7 +178,7 @@ result.verdict = {
   headlessManifestExplains236: result.headless.manifestToolNames.length >= 236,
   dshSnapshotExplains236: maxSnapshot >= 236,
   attachmentMatchesLogCount: attachmentCount !== null && received.includes(attachmentCount),
-  likelyUpstreamOrProvenanceMismatch:
+  likelyUpstreamOrSourceMismatch:
     maxReceived >= 236
     && result.backend.enabledPluginToolCount === 0
     && result.headless.manifestToolNames.length < 236

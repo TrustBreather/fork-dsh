@@ -44,6 +44,20 @@ pnpm dsh web
 
 `pnpm run build` 会准备仓库产物。`pnpm dsh web` 会直接使用这些已构建产物，不会重新构建。
 
+### 可选的 BackendOS 覆盖层
+
+源码树包含一个可选的部署覆盖层，用于连接本机的 BackendOS OpenAI 兼容桥接服务。普通的 `dsh web` 路径不需要 BackendOS。
+
+将 BackendOS checkout 放在本仓库同级的 `../backend-os-kernel-integrated`，或者将 `BACKEND_OS_ROOT` 设置为它的路径。BackendOS checkout 必须提供包含 `GPT_AGENT_TOKEN` 的 `.env` 和 `start_backend.bat`。
+
+```powershell
+$env:BACKEND_OS_ROOT = 'C:\path\backend-os-kernel-integrated'
+.\start-backend-os.bat
+.\start-dsh-build.bat
+```
+
+`start-dsh-build.bat` 会使用 `backend-os.patch.yml` 构建并启动 DSH；`start-dsh-no-build.bat` 会启动已经构建的产物。启动器从外部 BackendOS `.env` 读取 token，并将其作为 `BACKEND_OS_API_KEY` 传递；仓库不会保存 token。BackendOS checkout 不在默认同级目录时，请设置 `BACKEND_OS_ROOT` 或传入 `-BackendRoot`。
+
 ## 社区与支持
 
 - 通过 [GitHub Discussions](https://github.com/deepseek-ai/deepseek-harness/discussions) 提交反馈或 bug 报告。

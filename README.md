@@ -40,6 +40,20 @@ pnpm dsh web
 
 `pnpm run build` prepares the repository artifacts. `pnpm dsh web` uses those built artifacts without rebuilding.
 
+### Optional BackendOS overlay
+
+The source tree includes an optional deployment overlay for a local BackendOS OpenAI-compatible bridge. The ordinary `dsh web` path does not require BackendOS.
+
+Place the BackendOS checkout beside this repository as `../backend-os-kernel-integrated`, or set `BACKEND_OS_ROOT` to its path. The BackendOS checkout must provide `.env` with `GPT_AGENT_TOKEN` and `start_backend.bat`.
+
+```powershell
+$env:BACKEND_OS_ROOT = 'C:\path\backend-os-kernel-integrated'
+.\start-backend-os.bat
+.\start-dsh-build.bat
+```
+
+`start-dsh-build.bat` builds and starts DSH with `backend-os.patch.yml`; `start-dsh-no-build.bat` starts previously built artifacts. The launcher reads the token from the external BackendOS `.env` and passes it as `BACKEND_OS_API_KEY`; the token is not stored in this repository. Set `BACKEND_OS_ROOT` or pass `-BackendRoot` when the BackendOS checkout is not the default sibling directory.
+
 ## Community and support
 
 - Submit feedback or bug reports through [GitHub Discussions](https://github.com/deepseek-ai/deepseek-harness/discussions).

@@ -1,14 +1,26 @@
 [CmdletBinding()]
 param(
   [switch]$Build,
-  [switch]$RestartDsh
+  [switch]$RestartDsh,
+  [string]$BackendRoot = ''
 )
 
 $ErrorActionPreference = 'Stop'
 
-$dshRoot = $PSScriptRoot
-$backendRoot = 'C:\Users\NCO\OneDrive\Desktop\New folder (22)\backend-os-kernel-integrated'
-$backendEnvPath = Join-Path $backendRoot '.env'
+$dshRoot = (Resolve-Path -LiteralPath $PSScriptRoot).Path
+$backendRootPath = $BackendRoot
+if ([string]::IsNullOrWhiteSpace($backendRootPath)) {
+  $backendRootPath = $env:BACKEND_OS_ROOT
+}
+if ([string]::IsNullOrWhiteSpace($backendRootPath)) {
+  $backendRootPath = Join-Path (Split-Path -Parent $dshRoot) 'backend-os-kernel-integrated'
+}
+try {
+  $backendRootPath = (Resolve-Path -LiteralPath $backendRootPath -ErrorAction Stop).Path
+} catch {
+  throw "BackendOS root not found: $backendRootPath. Set BACKEND_OS_ROOT or pass -BackendRoot."
+}
+$backendEnvPath = Join-Path $backendRootPath '.env'
 $patchPath = Join-Path $dshRoot 'backend-os.patch.yml'
 
 function Get-ListeningProcessId {

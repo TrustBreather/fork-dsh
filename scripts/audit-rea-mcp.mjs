@@ -1,7 +1,16 @@
 import { spawn } from 'node:child_process'
+import { existsSync } from 'node:fs'
+import { resolve } from 'node:path'
 
-const node = 'D:\\node.exe'
-const entry = 'C:\\Users\\NCO\\OneDrive\\Desktop\\New folder (22)\\rea\\scripts\\rea.mjs'
+const harnessRoot = resolve(import.meta.dirname, '..')
+const reaRoot = resolve(process.env.REA_ROOT ?? resolve(harnessRoot, '..', 'rea'))
+const node = process.execPath
+const entry = resolve(reaRoot, 'scripts', 'rea.mjs')
+if (!existsSync(entry)) {
+  console.error(`REA MCP entry not found: ${entry}. Set REA_ROOT to the REA checkout.`)
+  process.exitCode = 1
+  process.exit()
+}
 const child = spawn(node, [entry, 'mcp'], { stdio: ['pipe', 'pipe', 'inherit'] })
 
 let buffer = ''

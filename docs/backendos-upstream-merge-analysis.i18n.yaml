@@ -1,0 +1,40 @@
+# Bilingual-pair consistency record for backendos-upstream-merge-analysis.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/backendos-upstream-merge-analysis.md
+/backendos-upstream-merge-analysis:
+  en: d8fe28b5f7c3e9f2
+  zh: 1eeb311d4c5ffd2c
+/backendos-upstream-merge-analysis/summary:
+  en: a1fbf8dd75c72cc5
+  zh: e2f1fdee7ca5da63
+/backendos-upstream-merge-analysis/comparison-baseline:
+  en: 396eea39c1a482f2
+  zh: 27c4139ae6009d10
+/backendos-upstream-merge-analysis/current-backendos-overlay:
+  en: 7a67f1a4e09716ef
+  zh: e871180d27ea2808
+/backendos-upstream-merge-analysis/upstream-changes-that-affect-the-overlay:
+  en: df4dba6620511b04
+  zh: 51cad0615a091e0f
+/backendos-upstream-merge-analysis/merge-direction-impact:
+  en: 140475bb1f036ec5
+  zh: 569c3502624ef051
+/backendos-upstream-merge-analysis/merge-direction-impact/merge-upstream-into-the-local-branch:
+  en: d3958feb14c7aecf
+  zh: 735a130b18ef3c48
+/backendos-upstream-merge-analysis/merge-direction-impact/merge-the-local-branch-into-the-fetched-upstream:
+  en: fb20faf407819471
+  zh: a06c7afd50de88f2
+/backendos-upstream-merge-analysis/answer-for-the-current-disable-enable-policy:
+  en: a414c17aca8eedcd
+  zh: 1de5527f66a429e2
+/backendos-upstream-merge-analysis/decision-and-limits:
+  en: f6e9455844117d0f
+  zh: edcc2bf55c8cc709
+/backendos-upstream-merge-analysis/cherry-pick-recommendation:
+  en: cd0dc66b77dc5487
+  zh: 7660d4a16599e9cf
+/backendos-upstream-merge-analysis/pull-attempt-and-rollback:
+  en: bf5ab0e2b03872d3
+  zh: d15495a1c1d24d8b
