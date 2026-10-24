@@ -44,6 +44,10 @@ pnpm dsh web
 
 `pnpm run build` 会准备仓库产物。`pnpm dsh web` 会直接使用这些已构建产物，不会重新构建。
 
+### Windows 全新 checkout 设置
+
+先安装 Node.js 22.19+ 或 24+，并准备启用 Corepack 的 pnpm。在 Windows 全新 checkout 中双击 [`setup-dsh.bat`](setup-dsh.bat)，脚本会检查工具链、按 lockfile 安装 workspace 依赖、构建产物并启动普通 Web UI；此路径不需要 BackendOS。若只想完成设置而不启动 Web，可运行 `powershell -NoProfile -ExecutionPolicy Bypass -File .\setup-dsh.ps1 -NoStart`；如果 PATH 中没有 `pnpm`，先运行 `corepack enable`。下面的 `start-*.bat` 只用于可选的 BackendOS 覆盖层，不是普通设置入口。
+
 ### 可选的 BackendOS 覆盖层
 
 源码树包含一个可选的部署覆盖层，用于连接本机的 BackendOS OpenAI 兼容桥接服务。普通的 `dsh web` 路径不需要 BackendOS。
@@ -80,10 +84,6 @@ $env:BACKEND_OS_ROOT = 'C:\path\backend-os-kernel-integrated'
     </tr>
   </tbody>
 </table>
-
-## 参与贡献
-
-参见 [CONTRIBUTING.md](CONTRIBUTING.zh.md)。
 
 ## 开发
 

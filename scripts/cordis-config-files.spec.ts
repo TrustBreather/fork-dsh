@@ -14,7 +14,15 @@ describe('cordisConfigFiles', () => {
   it('finds Loader YAML without treating translation records as configs', () => {
     const root = mkdtempSync(join(tmpdir(), 'dsh-cordis-config-files-'))
     roots.push(root)
-    for (const directory of ['.claude', 'apps/cli/config/examples', 'docs', 'node_modules/pkg', 'vendor/pkg']) {
+    for (const directory of [
+      '.claude',
+      'apps/cli/config/examples',
+      'apps/cli/tests/profiles/acp',
+      'docs',
+      'node_modules/pkg',
+      'snapshots/acp',
+      'vendor/pkg',
+    ]) {
       mkdirSync(join(root, directory), { recursive: true })
     }
     for (const file of [
@@ -27,10 +35,13 @@ describe('cordisConfigFiles', () => {
     ]) {
       writeFileSync(join(root, file), '[]\n')
     }
+    writeFileSync(join(root, 'snapshots/acp/shared.cordis.yml'), '[]\n')
+    writeFileSync(join(root, 'apps/cli/tests/profiles/acp/cordis.yml'), '../../../../../snapshots/acp/shared.cordis.yml\n')
 
     expect(cordisConfigFiles(root)).toEqual([
       join('apps', 'cli', 'config', 'examples', 'agent.cordis.yaml'),
       join('apps', 'cli', 'config', 'examples', 'headless.cordis.yml'),
+      join('snapshots', 'acp', 'shared.cordis.yml'),
     ])
   })
 })

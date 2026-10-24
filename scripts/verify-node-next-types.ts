@@ -84,7 +84,7 @@ function linkPackage(pkg: WorkspacePackage, nodeModules: string): void {
   const parts = pkg.name.split('/')
   const link = resolve(nodeModules, ...parts)
   mkdirSync(dirname(link), { recursive: true })
-  symlinkSync(pkg.dir, link, 'dir')
+  symlinkSync(pkg.dir, link, process.platform === 'win32' ? 'junction' : 'dir')
 }
 
 const packages = workspacePackages()
@@ -117,7 +117,7 @@ try {
   if (existsSync(rootTypes)) {
     const typesDir = resolve(nodeModules, '@types')
     mkdirSync(typesDir, { recursive: true })
-    symlinkSync(rootTypes, resolve(typesDir, 'node'), 'dir')
+    symlinkSync(rootTypes, resolve(typesDir, 'node'), process.platform === 'win32' ? 'junction' : 'dir')
   }
 
   writeFileSync(resolve(tmp, 'package.json'), `${JSON.stringify({ type: 'module', private: true }, null, 2)}\n`)
@@ -154,9 +154,24 @@ try {
   console.log(`verify-node-next-types: ${packages.length} workspace package declaration API(s) compile under NodeNext.`)
 } catch (error: unknown) {
   failed = true
-  const output = error as { stdout?: Buffer; stderr?: Buffer }
+  const output = error as {
+    code?: string | number
+    message?: string
+    output?: readonly (Buffer | string | null)[]
+    path?: string
+    signal?: NodeJS.Signals | null
+    spawnargs?: readonly string[]
+    status?: number | null
+    stderr?: Buffer | string
+    stdout?: Buffer | string
+  }
+  const stdout = output.stdout?.toString() ?? output.output?.[1]?.toString() ?? ''
+  const stderr = output.stderr?.toString() ?? output.output?.[2]?.toString() ?? ''
   console.error('verify-node-next-types: NodeNext consumer typecheck failed.\n')
-  console.error(`${output.stdout?.toString() ?? ''}${output.stderr?.toString() ?? ''}`)
+  console.error(`status=${String(output.status ?? 'unknown')} signal=${String(output.signal ?? 'none')} code=${String(output.code ?? 'unknown')} path=${String(output.path ?? 'unknown')}`)
+  if (output.spawnargs !== undefined) console.error(`spawnargs=${JSON.stringify(output.spawnargs)}`)
+  if (output.message !== undefined) console.error(output.message)
+  console.error(`${stdout}${stderr}`)
 } finally {
   rmSync(tmp, { recursive: true, force: true })
 }

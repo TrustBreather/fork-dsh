@@ -852,10 +852,6 @@
     "c387d84f2582ad93b2b123b5a2865127def18cd99d9240d4cdceb9965d0f9ad5": 1,
     "e9cbed9d889ff09b5300f7c8c58aa24096e3804f40280be06b66badd38ac59f5": 1
   },
-  "packages/context/agent-instructions/tests/agent-instructions.spec.ts": {
-    "52faf4558fcd91bd27dbdfa7e497843e8eeb75ea5f68ee231335018d5b3f2053": 1,
-    "a9f5b4f03784fcdfeeadca516332280ebba38d80a3a2c03952bfdd9b383b4be7": 1
-  },
   "packages/context/file-reference-local/tests/service.spec.ts": {
     "61caffd9649919d30152e7f8b7835d1b6f6c97e20bcdae05b442cf2d2c250afb": 1
   },

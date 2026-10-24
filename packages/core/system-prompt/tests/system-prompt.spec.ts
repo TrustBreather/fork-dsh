@@ -12,9 +12,7 @@ import type { PromptContextOrderName, PromptSectionOrderName } from '@deepseek-a
  * their own sections; the built-ins' behavior is pinned by its own describe.
  */
 const BUILT_IN = ['harness:identity', 'deployment:persona-prefix', 'deployment:persona-suffix']
-const IDENTITY = `You are an AI agent powered by DeepSeek Harness.
-
-Use tools deliberately. First determine the current goal and the single fact or action needed next. Choose the narrowest suitable tool; do not call a tool merely because it is available, to repeat evidence already present, or to satisfy a checklist.
+const IDENTITY = `Use tools deliberately. First determine the current goal and the single fact or action needed next. Choose the narrowest suitable tool; do not call a tool merely because it is available, to repeat evidence already present, or to satisfy a checklist.
 
 Emit one tool call or one small, coherent batch of tool calls, then stop generating and wait for the complete result before deciding what to do next. A batch is appropriate only when its calls are read-only, genuinely independent, bounded, and all useful for the same immediate goal. Never mix a dependent call into the batch, emit a speculative chain, or add calls merely because they are available. Do not continue prose or emit another batch while results are pending. Treat the result—including empty output, partial output, errors, and non-zero exits—as the evidence for the next decision.
 

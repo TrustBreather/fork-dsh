@@ -8,6 +8,15 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $dshRoot = (Resolve-Path -LiteralPath $PSScriptRoot).Path
+$nodeCommand = Get-Command node -ErrorAction SilentlyContinue
+if ($null -eq $nodeCommand) {
+  throw 'Node.js is not on PATH. Install the supported Node.js version before starting DSH.'
+}
+$pnpmCommand = Get-Command pnpm -ErrorAction SilentlyContinue
+if ($null -eq $pnpmCommand) {
+  throw 'pnpm is not on PATH. Run corepack enable or install pnpm before starting DSH.'
+}
+
 $backendRootPath = $BackendRoot
 if ([string]::IsNullOrWhiteSpace($backendRootPath)) {
   $backendRootPath = $env:BACKEND_OS_ROOT
@@ -58,16 +67,18 @@ if ([string]::IsNullOrWhiteSpace($apiKey)) {
 $env:BACKEND_OS_API_KEY = $apiKey
 
 $dshProcessId = Get-ListeningProcessId -Port 3080
-if ($dshProcessId -and $RestartDsh) {
+if ($dshProcessId) {
   $dshProcess = Get-CimInstance Win32_Process -Filter "ProcessId = $dshProcessId"
-  if ($dshProcess.CommandLine -notmatch 'apps[\\/]cli[\\/]src[\\/]bin\.ts web') {
+  if ($null -eq $dshProcess -or $dshProcess.CommandLine -notmatch 'apps[\\/]cli[\\/]src[\\/]bin\.ts web') {
     throw "Port 3080 is occupied by an unrelated process (PID $dshProcessId)"
   }
 
-  Write-Host "Restarting DSH on port 3080 (PID $dshProcessId) ..."
-  Stop-Process -Id $dshProcessId -Force
-  Start-Sleep -Seconds 1
-  $dshProcessId = Get-ListeningProcessId -Port 3080
+  if ($RestartDsh) {
+    Write-Host "Restarting DSH on port 3080 (PID $dshProcessId) ..."
+    Stop-Process -Id $dshProcessId -Force
+    Start-Sleep -Seconds 1
+    $dshProcessId = Get-ListeningProcessId -Port 3080
+  }
 }
 
 if (-not $dshProcessId) {

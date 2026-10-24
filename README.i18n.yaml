@@ -17,15 +17,15 @@
 /deepseek-harness/run/run-from-source:
   en: 819e3f7c144d0d64
   zh: de815f040975dba7
+/deepseek-harness/run/windows-clean-checkout-setup:
+  en: 65ee16d368c00c52
+  zh: 2ca5f1afd97ba239
 /deepseek-harness/run/optional-backendos-overlay:
   en: bc86bd10b905175e
   zh: 10745abd9566ac64
 /deepseek-harness/community-and-support:
   en: 42848f543aff6e02
   zh: d46a07bdc6f36629
-/deepseek-harness/contributing:
-  en: cabc2d3e9f8898bd
-  zh: 83b6d238bae29ce3
 /deepseek-harness/development:
   en: 803ca2b11b497bed
   zh: 8b4071eb0e7783ef

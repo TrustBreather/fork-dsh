@@ -57,6 +57,14 @@ function send(agent: Agent, text: string) {
   agent.followup(createUserMessage({ content: [{ type: 'text', text }], source: { kind: 'user' } }))
 }
 
+const DEFAULT_TOOL_GUIDANCE = `Use tools deliberately. First determine the current goal and the single fact or action needed next. Choose the narrowest suitable tool; do not call a tool merely because it is available, to repeat evidence already present, or to satisfy a checklist.
+
+Emit one tool call or one small, coherent batch of tool calls, then stop generating and wait for the complete result before deciding what to do next. A batch is appropriate only when its calls are read-only, genuinely independent, bounded, and all useful for the same immediate goal. Never mix a dependent call into the batch, emit a speculative chain, or add calls merely because they are available. Do not continue prose or emit another batch while results are pending. Treat the result—including empty output, partial output, errors, and non-zero exits—as the evidence for the next decision.
+
+After every result, re-evaluate the goal. If the result resolves the request, stop. Otherwise identify the next missing fact and make only the next necessary call. Do not repeat a call with unchanged inputs unless the prior result was incomplete, stale, or the user requested a retry. Diagnose failures before choosing a fallback.
+
+Keep batches as small as the immediate goal allows. Prefer sequential calls when the next input, target, scope, or action depends on an earlier result. Never parallelize mutations, retries, exploratory guesses, or calls whose inputs depend on another result. Before each call, ensure its result can change the next decision; otherwise omit it.`
+
 /** The rendered system prompt a request carried as its leading system-role message. */
 function systemOf(request: GenerateOptions | undefined): string | undefined {
   const head = request?.messages[0]
@@ -541,7 +549,7 @@ describe('agent loop', () => {
     await waitForIdle(ctx, agent)
 
     const request = adapter.requests[0]
-    expect(systemOf(request)).toBe('You are an AI agent powered by DeepSeek Harness.\n\nYou are a test agent on mock.\n\nUse the noop tool wisely.')
+    expect(systemOf(request)).toBe(`${DEFAULT_TOOL_GUIDANCE}\n\nYou are a test agent on mock.\n\nUse the noop tool wisely.`)
     expect(request!.tools?.map(t => t.name)).toEqual(['noop'])
   })
 
@@ -558,7 +566,7 @@ describe('agent loop', () => {
     send(agent, 'hi')
     await waitForIdle(ctx, agent)
 
-    expect(systemOf(adapter.requests[0])).toBe('You are an AI agent powered by DeepSeek Harness.\n\nWorking in /work/space.')
+    expect(systemOf(adapter.requests[0])).toBe(`${DEFAULT_TOOL_GUIDANCE}\n\nWorking in /work/space.`)
   })
 
   it('contains a strict-variable render failure: the turn errors, the loop keeps serving turns', async () => {
@@ -594,7 +602,7 @@ describe('agent loop', () => {
     await waitForIdle(ctx, agent)
 
     expect(adapter.requests).toHaveLength(1)
-    expect(systemOf(adapter.requests[0])).toBe('You are an AI agent powered by DeepSeek Harness.\n\nIn /rescued.')
+    expect(systemOf(adapter.requests[0])).toBe(`${DEFAULT_TOOL_GUIDANCE}\n\nIn /rescued.`)
     const turnEnds = agent.session.snapshotEvents().filter(e => e.type === 'turn/end')
     expect(turnEnds).toHaveLength(2)
     expect(turnEnds[1]?.type === 'turn/end' && turnEnds[1].data.reason.kind).toBe('completed')
@@ -624,7 +632,7 @@ describe('agent loop', () => {
 
     expect(adapter.requests).toHaveLength(1)
     expect(adapter.requests[0]!.model).toBe('mock')
-    expect(systemOf(adapter.requests[0])).toBe('You are an AI agent powered by DeepSeek Harness.\n\nYou run on mock.')
+    expect(systemOf(adapter.requests[0])).toBe(`${DEFAULT_TOOL_GUIDANCE}\n\nYou run on mock.`)
   })
 
   it('sends no system message when system-prompt/assemble short-circuits with an empty assembly', async () => {
@@ -666,7 +674,7 @@ describe('agent loop', () => {
       send(agent, 'second')
       await secondIdle
       expect(adapter.requests).toHaveLength(2)
-      expect(systemOf(adapter.requests[1])).toBe('You are an AI agent powered by DeepSeek Harness.')
+      expect(systemOf(adapter.requests[1])).toBe(DEFAULT_TOOL_GUIDANCE)
       expect(adapter.requests[1]?.messages.map(message => message.role)).toEqual(['system', 'user', 'assistant', 'user'])
       const replacement = agent.session.snapshotEvents().findLast(event => event.type === 'system/message')
       expect(replacement).toMatchObject({

@@ -40,6 +40,10 @@ pnpm dsh web
 
 `pnpm run build` prepares the repository artifacts. `pnpm dsh web` uses those built artifacts without rebuilding.
 
+### Windows clean-checkout setup
+
+Install Node.js 22.19+ or 24+ and Corepack-enabled pnpm once. From a fresh Windows checkout, double-click [`setup-dsh.bat`](setup-dsh.bat) to validate the toolchain, install the frozen workspace dependencies, build the artifacts, and start the ordinary Web UI. This path does not require BackendOS. To prepare the checkout without starting Web, run `powershell -NoProfile -ExecutionPolicy Bypass -File .\setup-dsh.ps1 -NoStart`; if `pnpm` is not on PATH, run `corepack enable` first. The `start-*.bat` files below are for the optional BackendOS overlay and are not the ordinary setup path.
+
 ### Optional BackendOS overlay
 
 The source tree includes an optional deployment overlay for a local BackendOS OpenAI-compatible bridge. The ordinary `dsh web` path does not require BackendOS.
@@ -59,10 +63,6 @@ $env:BACKEND_OS_ROOT = 'C:\path\backend-os-kernel-integrated'
 - Submit feedback or bug reports through [GitHub Discussions](https://github.com/deepseek-ai/deepseek-harness/discussions).
 - Add the [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic to your plugin repository for discoverability.
 - Join <a href="https://discord.gg/Ycq5dCaS4">DeepSeek Harness Discord community</a>.
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Development
 
